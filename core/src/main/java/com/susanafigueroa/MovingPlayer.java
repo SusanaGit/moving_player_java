@@ -11,11 +11,13 @@ public class MovingPlayer extends Game {
     // main component for driving things on the screen
     private SpriteBatch batch;
     private Texture image;
+    private Texture turtle;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("Game BG.png");
+        turtle = new Texture("turtle.png");
     }
 
     @Override
@@ -27,6 +29,7 @@ public class MovingPlayer extends Game {
 
         batch.begin();
         batch.draw(image, 0, 0, screenWidth, screenHeight);
+        batch.draw(turtle, (float) screenWidth /2, 0, 200, 200);
         batch.end();
     }
 
