@@ -3,6 +3,7 @@ package com.susanafigueroa;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -14,7 +15,7 @@ public class MovingPlayer extends Game {
     // main component for driving things on the screen
     private SpriteBatch batch;
     private Texture image;
-    private Texture turtle;
+    private Sprite turtle;
 
     // I want to use the WIDTH and the HEIGHT of the GameInfo to declare thing positions and sizes
     // OrthographicCamera -> defines 2D perspective of the game
@@ -35,7 +36,7 @@ public class MovingPlayer extends Game {
 
         batch = new SpriteBatch();
         image = new Texture("Game BG.png");
-        turtle = new Texture("turtle.png");
+        turtle = new Sprite(new Texture("turtle.png"));
     }
 
     @Override
@@ -60,6 +61,6 @@ public class MovingPlayer extends Game {
     public void dispose() {
         batch.dispose();
         image.dispose();
-        turtle.dispose();
+        turtle.getTexture().dispose();
     }
 }
