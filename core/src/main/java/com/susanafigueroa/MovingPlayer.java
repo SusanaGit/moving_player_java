@@ -37,6 +37,8 @@ public class MovingPlayer extends Game {
         batch = new SpriteBatch();
         image = new Texture("Game BG.png");
         turtle = new Sprite(new Texture("turtle.png"));
+
+        turtle.setPosition((float) GameInfo.WIDTH /2, 0);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class MovingPlayer extends Game {
 
         batch.begin();
         batch.draw(image, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
-        batch.draw(turtle, (float) GameInfo.WIDTH /2, 0, 200, 200);
+        batch.draw(turtle, turtle.getX(), turtle.getY(), 200, 200);
         batch.end();
     }
 
