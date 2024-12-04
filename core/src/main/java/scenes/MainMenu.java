@@ -1,16 +1,22 @@
 package scenes;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.susanafigueroa.MovingPlayer;
+
+import helpers.GameInfo;
 
 public class MainMenu implements Screen {
 
     private MovingPlayer movingPlayer;
 
+    // background
+    private Texture imageBackground;
+
     // I want to use the SpriteBatch from MovingPlayer class
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
-
+        imageBackground = new Texture("Game BG.png");
     }
 
     // create method in the MovingPlayer class
@@ -22,7 +28,9 @@ public class MainMenu implements Screen {
     // render method in the MovingPlayer class
     @Override
     public void render(float delta) {
-
+        movingPlayer.getBatch().begin();
+        movingPlayer.getBatch().draw(imageBackground, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
+        movingPlayer.getBatch().end();
     }
 
     // to ensure that our screen will always be the WIDTH and the HEIGHT

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import helpers.GameInfo;
+import scenes.MainMenu;
 
 public class MovingPlayer extends Game {
 
@@ -17,12 +18,13 @@ public class MovingPlayer extends Game {
 
     @Override
     public void create() {
-
+        batch = new SpriteBatch();
+        setScreen(new MainMenu(this));
     }
 
     @Override
     public void render() {
-
+        super.render();
     }
 
     public SpriteBatch getBatch() {
@@ -31,7 +33,6 @@ public class MovingPlayer extends Game {
 
 
 /*
-    private Texture image;
     private Sprite turtle;
 
     // I want to use the WIDTH and the HEIGHT of the GameInfo to declare thing positions and sizes
@@ -51,8 +52,8 @@ public class MovingPlayer extends Game {
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
 
-        batch = new SpriteBatch();
-        image = new Texture("Game BG.png");
+
+
         turtle = new Sprite(new Texture("turtle.png"));
 
         turtle.setPosition((float) GameInfo.WIDTH/2, 0);
@@ -67,10 +68,10 @@ public class MovingPlayer extends Game {
 
         turtle.setPosition(turtle.getX(), turtle.getY());
 
-        batch.begin();
-        batch.draw(image, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
+
+
         batch.draw(turtle, turtle.getX(), turtle.getY(), 200, 200);
-        batch.end();
+
     }
 
     @Override
