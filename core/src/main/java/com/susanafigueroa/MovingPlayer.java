@@ -7,7 +7,6 @@ import scenes.MainMenu;
 
 public class MovingPlayer extends Game {
 
-    // main component for driving things on the screen
     private SpriteBatch batch;
 
     @Override
