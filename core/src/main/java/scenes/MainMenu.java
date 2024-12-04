@@ -1,8 +1,17 @@
 package scenes;
 
 import com.badlogic.gdx.Screen;
+import com.susanafigueroa.MovingPlayer;
 
 public class MainMenu implements Screen {
+
+    private MovingPlayer movingPlayer;
+
+    // I want to use the SpriteBatch from MovingPlayer class
+    public MainMenu(MovingPlayer movingPlayer) {
+        this.movingPlayer = movingPlayer;
+
+    }
 
     // create method in the MovingPlayer class
     @Override
