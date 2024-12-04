@@ -3,6 +3,7 @@ package scenes;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
@@ -23,6 +24,8 @@ public class MainMenu implements Screen {
     // StretchViewport -> to maintain a fixed aspect ratio
     private StretchViewport viewport;
 
+    private Sprite turtle;
+
     // I want to use the SpriteBatch from MovingPlayer class
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
@@ -39,6 +42,9 @@ public class MainMenu implements Screen {
         // set the position of the camera in the middle of the screen
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
+
+        turtle = new Sprite(new Texture("turtle.png"));
+        turtle.setPosition((float) GameInfo.WIDTH/2, 0);
     }
 
     // render method in the MovingPlayer class
@@ -52,6 +58,8 @@ public class MainMenu implements Screen {
 
         movingPlayer.getBatch().begin();
         movingPlayer.getBatch().draw(imageBackground, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
+        turtle.setPosition(turtle.getX(), turtle.getY());
+        movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), 200, 200);
         movingPlayer.getBatch().end();
     }
 
@@ -84,5 +92,6 @@ public class MainMenu implements Screen {
     public void dispose() {
         movingPlayer.getBatch().dispose();
         imageBackground.dispose();
+        turtle.getTexture().dispose();
     }
 }
