@@ -11,46 +11,34 @@ import com.susanafigueroa.MovingPlayer;
 import helpers.GameInfo;
 
 public class MainMenu implements Screen {
-
     private MovingPlayer movingPlayer;
-
-    // background
     private Texture imageBackground;
-
-    // I want to use the WIDTH and the HEIGHT of the GameInfo to declare thing positions and sizes
-    // OrthographicCamera -> defines 2D perspective of the game
     private OrthographicCamera camera;
-
-    // StretchViewport -> to maintain a fixed aspect ratio
     private StretchViewport viewport;
-
     private Sprite turtle;
 
-    // I want to use the SpriteBatch from MovingPlayer class
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
+
         imageBackground = new Texture("Game BG.png");
+        turtle = new Sprite(new Texture("turtle.png"));
+        turtle.setPosition((float) GameInfo.WIDTH/2, 0);
+
+        camera = new OrthographicCamera();
+        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera);
+
+        camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
+        camera.update();
     }
 
     // create method in the MovingPlayer class
     @Override
     public void show() {
-        // initialize camera and viewport
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera);
-
-        // set the position of the camera in the middle of the screen
-        camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
-        camera.update();
-
-        turtle = new Sprite(new Texture("turtle.png"));
-        turtle.setPosition((float) GameInfo.WIDTH/2, 0);
     }
 
     // render method in the MovingPlayer class
     @Override
     public void render(float delta) {
-
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         camera.update();
