@@ -14,6 +14,23 @@ public class MovingPlayer extends Game {
 
     // main component for driving things on the screen
     private SpriteBatch batch;
+
+    @Override
+    public void create() {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
+
+    public SpriteBatch getBatch() {
+        return this.batch;
+    }
+
+
+/*
     private Texture image;
     private Sprite turtle;
 
@@ -38,7 +55,7 @@ public class MovingPlayer extends Game {
         image = new Texture("Game BG.png");
         turtle = new Sprite(new Texture("turtle.png"));
 
-        turtle.setPosition((float) GameInfo.WIDTH /2, 0);
+        turtle.setPosition((float) GameInfo.WIDTH/2, 0);
     }
 
     @Override
@@ -47,6 +64,8 @@ public class MovingPlayer extends Game {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+
+        turtle.setPosition(turtle.getX(), turtle.getY());
 
         batch.begin();
         batch.draw(image, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
@@ -64,5 +83,5 @@ public class MovingPlayer extends Game {
         batch.dispose();
         image.dispose();
         turtle.getTexture().dispose();
-    }
+    }*/
 }
