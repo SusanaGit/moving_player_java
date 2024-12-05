@@ -3,6 +3,9 @@ package scenes;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
@@ -12,23 +15,27 @@ import player.Player;
 
 public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;
-    private Texture imageBackground;
     private OrthographicCamera camera;
     private StretchViewport viewport;
+    private TiledMap tiledMap;
+    private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
 
-        imageBackground = new Texture("Game BG.png");
+        // map configuration
+        TmxMapLoader mapLoader = new TmxMapLoader(); // cargo el mapa con TmxMapLoader
+        tiledMap = mapLoader.load("mapa.tmx"); // tiledMap contiene toda la info del mapa
+        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
 
-        turtle = new Player("turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
-
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera);
+        camera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
+        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
 
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
+
+        turtle = new Player("turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
     }
 
     @Override
@@ -40,10 +47,13 @@ public class MainMenu implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         camera.update();
+
+        mapRenderer.setView(camera);
+        mapRenderer.render();
+
         movingPlayer.getBatch().setProjectionMatrix(camera.combined);
 
         movingPlayer.getBatch().begin();
-        movingPlayer.getBatch().draw(imageBackground, 0, 0, GameInfo.WIDTH, GameInfo.HEIGHT);
         movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
         movingPlayer.getBatch().end();
     }
@@ -71,7 +81,8 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         movingPlayer.getBatch().dispose();
-        imageBackground.dispose();
+        tiledMap.dispose();
+        movingPlayer.getBatch().dispose();
         turtle.getTexture().dispose();
     }
 }
