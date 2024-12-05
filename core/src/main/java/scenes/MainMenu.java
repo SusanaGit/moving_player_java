@@ -82,7 +82,6 @@ public class MainMenu implements Screen {
     public void dispose() {
         movingPlayer.getBatch().dispose();
         tiledMap.dispose();
-        movingPlayer.getBatch().dispose();
         turtle.getTexture().dispose();
     }
 }
