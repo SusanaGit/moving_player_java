@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
@@ -20,9 +22,12 @@ public class MainMenu implements Screen {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
+    private World world;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
+
+        world = new World(new Vector2(0, -9), true);
 
         // map configuration
         TmxMapLoader mapLoader = new TmxMapLoader(); // cargo el mapa con TmxMapLoader
@@ -35,7 +40,7 @@ public class MainMenu implements Screen {
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
 
-        turtle = new Player("turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
+        turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
     }
 
     @Override
