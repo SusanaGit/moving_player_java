@@ -1,8 +1,8 @@
 package scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -27,6 +27,7 @@ public class MainMenu implements Screen {
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
 
+        // gravedad -9 eje y
         world = new World(new Vector2(0, -9), true);
 
         // map configuration
