@@ -48,4 +48,8 @@ public class Player extends Sprite {
 
         shape.dispose();
     }
+
+    public void updatePlayer() {
+        this.setPosition(body.getPosition().x, body.getPosition().y);
+    }
 }

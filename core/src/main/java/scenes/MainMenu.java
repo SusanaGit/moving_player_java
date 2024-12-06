@@ -42,6 +42,7 @@ public class MainMenu implements Screen {
         camera.update();
 
         turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
+        turtle.createBody();
     }
 
     @Override
@@ -50,6 +51,9 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
+
+        turtle.updatePlayer();
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         camera.update();
