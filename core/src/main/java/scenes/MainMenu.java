@@ -62,6 +62,11 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().begin();
         movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
         movingPlayer.getBatch().end();
+
+        // world contiene la info de los cuerpos, contactos, fuerzas físicas
+        // step -> actualiza posiciones, velocidades, fuerzas de los objetos
+        // DeltaTime -> devuelve el tiempo desde el último fotograma
+        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 
     @Override
