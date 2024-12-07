@@ -107,16 +107,46 @@ public class MainMenu implements Screen {
     public void show() {
     }
 
+    private void updateCamera() {
+        Vector2 positionPlayerTurtle = turtle.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
+        Gdx.app.log("POSITION TURTLE X PIXELS", Float.toString(positionPlayerTurtle.x * GameInfo.PPM));
+        Gdx.app.log("POSITION TURTLE Y PIXELS", Float.toString(positionPlayerTurtle.y * GameInfo.PPM));
+
+        float mapWidthTiles = tiledMap.getProperties().get("width", Integer.class);
+        float mapHeightTiles = tiledMap.getProperties().get("height", Integer.class);
+        Gdx.app.log("TILES MAP WIDTH", Float.toString(mapWidthTiles)); // 300
+        Gdx.app.log("TILES MAP HEIGHT", Float.toString(mapHeightTiles)); // 40
+
+        float mapWidthPixels = mapWidthTiles * 32;
+        float mapHeightPixels = mapHeightTiles * 32;
+        Gdx.app.log("PIXELS MAP WIDTH", Float.toString(mapWidthPixels)); // 300 * 32 = 9600
+        Gdx.app.log("PIXELS MAP HEIGHT", Float.toString(mapHeightPixels)); // 40 * 32 = 1280
+
+        float cameraWidth = camera.viewportWidth;
+        float cameraHeight = camera.viewportHeight;
+        Gdx.app.log("CAMERA WIDTH", Float.toString(cameraWidth)); // 960
+        Gdx.app.log("CAMERA HEIGHT", Float.toString(cameraHeight)); // 640
+
+        float cameraX = Math.max(cameraWidth/2, Math.min(positionPlayerTurtle.x * GameInfo.PPM,
+            mapWidthPixels - cameraWidth/2));
+        float cameraY = Math.max(cameraHeight/2, Math.min(positionPlayerTurtle.y * GameInfo.PPM,
+            mapHeightPixels - cameraHeight/2));
+
+        camera.position.set(cameraX, cameraY, 0);
+
+        camera.update();
+    }
+
     @Override
     public void render(float delta) {
 
         update(delta);
 
+        updateCamera();
+
         turtle.updatePlayer();
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-
-        camera.update();
 
         mapRenderer.setView(camera);
         mapRenderer.render();
