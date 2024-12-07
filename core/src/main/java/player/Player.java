@@ -63,4 +63,8 @@ public class Player extends Sprite {
             body.getPosition().y - getHeight() / 2
         );
     }
+
+    public Body getBody() {
+        return this.body;
+    }
 }

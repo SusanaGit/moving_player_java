@@ -1,6 +1,7 @@
 package scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -54,12 +55,26 @@ public class MainMenu implements Screen {
         debugRenderer = new Box2DDebugRenderer();
     }
 
+    public void update(float dt) {
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            turtle.getBody().applyLinearImpulse(
+                new Vector2( -1, 0), turtle.getBody().getWorldCenter(), true
+                );
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            turtle.getBody().applyLinearImpulse(
+                new Vector2(+1, 0), turtle.getBody().getWorldCenter(), true
+            );
+        }
+    }
+
     @Override
     public void show() {
     }
 
     @Override
     public void render(float delta) {
+
+        update(delta);
 
         turtle.updatePlayer();
 
