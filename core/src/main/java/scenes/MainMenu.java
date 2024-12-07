@@ -40,13 +40,13 @@ public class MainMenu implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
 
         camera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
-        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
-
+        camera.setToOrtho(false, GameInfo.WIDTH, GameInfo.HEIGHT);
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
 
+        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
+
         turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
-        turtle.createBody();
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);

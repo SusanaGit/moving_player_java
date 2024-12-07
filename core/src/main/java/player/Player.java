@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,6 +18,7 @@ public class Player extends Sprite {
         this.world = world;
         setSize(200, 200);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
+        createBody();
     }
 
     public void createBody() {
@@ -28,28 +28,39 @@ public class Player extends Sprite {
         // DynamicBody -> afected by gravity and other forces
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        // posición inicial, la misma que el player
-        bodyDef.position.set(getX(), getY());
+        // initial position in meters
+        bodyDef.position.set(
+            getX() + getWidth() / 2,
+            getY() + getHeight() / 2
+        );
 
         // body ahora está en el world
         body = world.createBody(bodyDef);
 
         // defino rectángulo
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(getWidth() / 2, getHeight() / 2);
+        // shape in meters
+        shape.setAsBox(
+            getWidth() / 2,
+            getHeight() / 2
+        );
 
         // defino las propiedades físicas del body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1;
+        fixtureDef.density = 1f;
 
         // fijo el body al rectángulo shape
-        Fixture fixture = body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef);
 
         shape.dispose();
     }
 
     public void updatePlayer() {
-        this.setPosition(body.getPosition().x, body.getPosition().y);
+
+        this.setPosition(
+            body.getPosition().x - getWidth() / 2,
+            body.getPosition().y - getHeight() / 2
+        );
     }
 }

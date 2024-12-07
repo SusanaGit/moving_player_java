@@ -1,7 +1,5 @@
 package bodiesmap;
 
-import static helpers.GameInfo.PPM;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -44,16 +42,16 @@ public class BodiesMap {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set(
-                (rect.x + rect.width / 2) / PPM,
-                (rect.y + rect.height / 2) / PPM
+                (rect.x + rect.width / 2),
+                (rect.y + rect.height / 2)
             );
 
             Body mapBody = world.createBody(bodyDef);
 
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(
-                rect.width / 2 / PPM,
-                rect.height / 2 / PPM
+                rect.width / 2,
+                rect.height / 2
             );
 
             FixtureDef fixtureDef = new FixtureDef();
