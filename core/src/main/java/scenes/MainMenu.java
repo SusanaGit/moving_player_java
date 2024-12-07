@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
 
+import bodiesmap.BodiesMap;
 import helpers.GameInfo;
 import player.Player;
 
@@ -20,6 +21,7 @@ public class MainMenu implements Screen {
     private OrthographicCamera camera;
     private StretchViewport viewport;
     private TiledMap tiledMap;
+    private BodiesMap bodiesMap;
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
     private World world;
@@ -43,6 +45,9 @@ public class MainMenu implements Screen {
 
         turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
         turtle.createBody();
+
+        bodiesMap = new BodiesMap();
+        bodiesMap.createStaticBodiesFromMap(tiledMap, world);
     }
 
     @Override
