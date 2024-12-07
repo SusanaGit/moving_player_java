@@ -33,7 +33,7 @@ public class MainMenu implements Screen {
         this.movingPlayer = movingPlayer;
 
         // gravedad -9 eje y
-        world = new World(new Vector2(0, -9), true);
+        world = new World(new Vector2(0, -9.8f), true);
 
         // map configuration
         TmxMapLoader mapLoader = new TmxMapLoader(); // cargo el mapa con TmxMapLoader
@@ -41,13 +41,13 @@ public class MainMenu implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
 
         camera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
-        camera.setToOrtho(false, GameInfo.WIDTH, GameInfo.HEIGHT);
+        camera.setToOrtho(false, (float) GameInfo.WIDTH, (float) GameInfo.HEIGHT);
         camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
         camera.update();
 
-        viewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
+        viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
 
-        turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH / 2 , (float) GameInfo.HEIGHT / 2);
+        turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
@@ -58,13 +58,29 @@ public class MainMenu implements Screen {
     public void update(float dt) {
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             turtle.getBody().applyLinearImpulse(
-                new Vector2( -1, 0), turtle.getBody().getWorldCenter(), true
+                new Vector2( -20f, 0), turtle.getBody().getWorldCenter(), true
                 );
         } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             turtle.getBody().applyLinearImpulse(
-                new Vector2(+1, 0), turtle.getBody().getWorldCenter(), true
+                new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
             );
         }
+
+        if (Gdx.input.isTouched()) {
+            float valueTouchX = Gdx.input.getX();
+            float screenWidth = Gdx.graphics.getWidth();
+
+            if (valueTouchX < screenWidth / 2) {
+                turtle.getBody().applyLinearImpulse(
+                    new Vector2(-20f, 0), turtle.getBody().getWorldCenter(), true
+                );
+            } else {
+                turtle.getBody().applyLinearImpulse(
+                    new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
+                );
+            }
+        }
+
     }
 
     @Override

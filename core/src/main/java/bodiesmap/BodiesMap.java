@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import helpers.GameInfo;
+
 public class BodiesMap {
 
     private String nameCollisionLayer = "collision_layer";
@@ -42,21 +44,21 @@ public class BodiesMap {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.position.set(
-                (rect.x + rect.width / 2),
-                (rect.y + rect.height / 2)
+                (rect.x + rect.width / 2)/GameInfo.PPM,
+                (rect.y + rect.height / 2)/GameInfo.PPM
             );
 
             Body mapBody = world.createBody(bodyDef);
 
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(
-                rect.width / 2,
-                rect.height / 2
+                (rect.width / 2)/GameInfo.PPM,
+                (rect.height / 2)/GameInfo.PPM
             );
 
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
-            fixtureDef.density = 1f;
+            fixtureDef.density = 20f;
 
             mapBody.createFixture(fixtureDef);
 

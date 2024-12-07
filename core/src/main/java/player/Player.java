@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import helpers.GameInfo;
+
 public class Player extends Sprite {
 
     private World world;
@@ -16,7 +18,7 @@ public class Player extends Sprite {
     public Player(World world, String name, float x, float y) {
         super(new Texture(name));
         this.world = world;
-        setSize(200, 200);
+        setSize(100, 100);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         createBody();
     }
@@ -30,8 +32,8 @@ public class Player extends Sprite {
 
         // initial position in meters
         bodyDef.position.set(
-            getX() + getWidth() / 2,
-            getY() + getHeight() / 2
+            (getX() + getWidth() / 2)/GameInfo.PPM,
+            (getY() + getHeight() / 2)/GameInfo.PPM
         );
 
         // body ahora está en el world
@@ -41,14 +43,15 @@ public class Player extends Sprite {
         PolygonShape shape = new PolygonShape();
         // shape in meters
         shape.setAsBox(
-            getWidth() / 2,
-            getHeight() / 2
+            (getWidth() / 2f)/GameInfo.PPM,
+            (getHeight() / 2f)/GameInfo.PPM
         );
 
         // defino las propiedades físicas del body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
+        fixtureDef.density = 20f;
+        fixtureDef.friction = 40f;
 
         // fijo el body al rectángulo shape
         body.createFixture(fixtureDef);
@@ -59,8 +62,8 @@ public class Player extends Sprite {
     public void updatePlayer() {
 
         this.setPosition(
-            body.getPosition().x - getWidth() / 2,
-            body.getPosition().y - getHeight() / 2
+            (body.getPosition().x * GameInfo.PPM) - getWidth() / 2,
+            (body.getPosition().y * GameInfo.PPM) - getHeight() / 2
         );
     }
 
