@@ -59,16 +59,27 @@ public class MainMenu implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             turtle.getBody().applyLinearImpulse(
                 new Vector2( -20f, 0), turtle.getBody().getWorldCenter(), true
-                );
+            );
         } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             turtle.getBody().applyLinearImpulse(
                 new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
             );
+        } else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            turtle.getBody().applyLinearImpulse(
+                new Vector2( 0, +20f), turtle.getBody().getWorldCenter(), true
+            );
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            turtle.getBody().applyLinearImpulse(
+                new Vector2( 0, -20f), turtle.getBody().getWorldCenter(), true
+            );
         }
+
 
         if (Gdx.input.isTouched()) {
             float valueTouchX = Gdx.input.getX();
+            float valueTouchY = Gdx.input.getY();
             float screenWidth = Gdx.graphics.getWidth();
+            float screenHeight = Gdx.graphics.getHeight();
 
             if (valueTouchX < screenWidth / 2) {
                 turtle.getBody().applyLinearImpulse(
@@ -79,8 +90,17 @@ public class MainMenu implements Screen {
                     new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
                 );
             }
-        }
 
+            if (valueTouchY > screenHeight / 2) {
+                turtle.getBody().applyLinearImpulse(
+                    new Vector2(0, -20f), turtle.getBody().getWorldCenter(), true
+                );
+            } else {
+                turtle.getBody().applyLinearImpulse(
+                    new Vector2(0, +20f), turtle.getBody().getWorldCenter(), true
+                );
+            }
+        }
     }
 
     @Override
