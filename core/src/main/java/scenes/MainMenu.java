@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -25,6 +26,7 @@ public class MainMenu implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
     private World world;
+    private Box2DDebugRenderer debugRenderer;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
@@ -48,6 +50,8 @@ public class MainMenu implements Screen {
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
+
+        debugRenderer = new Box2DDebugRenderer();
     }
 
     @Override
@@ -71,6 +75,8 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().begin();
         movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
         movingPlayer.getBatch().end();
+
+        debugRenderer.render(world, camera.combined);
 
         // world contiene la info de los cuerpos, contactos, fuerzas físicas
         // step -> actualiza posiciones, velocidades, fuerzas de los objetos
@@ -103,5 +109,6 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().dispose();
         tiledMap.dispose();
         turtle.getTexture().dispose();
+        debugRenderer.dispose();
     }
 }

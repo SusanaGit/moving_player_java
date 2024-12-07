@@ -22,13 +22,13 @@ public class BodiesMap {
 
         MapLayer collisionLayer = map.getLayers().get(nameCollisionLayer);
         if (collisionLayer == null) {
-            Gdx.app.log("!!!!!", "LAYER NOT FOUNDED :(");
+            Gdx.app.log("!!!!!", "LAYER NOT FOUND :(");
             return;
         }
 
 
         for (MapObject mapObject : collisionLayer.getObjects()) {
-            Gdx.app.log("GOOD!!!!!", "LAYER FOUNDED :)");
+            Gdx.app.log("GOOD!!!!!", "LAYER FOUND :)");
 
             createStaticBody(mapObject, world);
         }
