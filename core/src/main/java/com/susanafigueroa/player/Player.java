@@ -18,7 +18,7 @@ public class Player extends Sprite {
     public Player(World world, String name, float x, float y) {
         super(new Texture(name));
         this.world = world;
-        setSize(20f, 20f);
+        setSize(40f, 40f);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         createBody();
     }
@@ -50,7 +50,7 @@ public class Player extends Sprite {
         // defino las propiedades físicas del body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 40f;
+        fixtureDef.density = 80f;
         fixtureDef.friction = 40f;
 
         // fijo el body al rectángulo shape

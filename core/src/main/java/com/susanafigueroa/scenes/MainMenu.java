@@ -17,6 +17,7 @@ import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.player.Player;
+import com.susanafigueroa.villains.Villain;
 
 public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;
@@ -24,6 +25,7 @@ public class MainMenu implements Screen {
     private StretchViewport viewport;
     private TiledMap tiledMap;
     private BodiesMap bodiesMap;
+    private Villain villains;
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
     private World world;
@@ -51,6 +53,9 @@ public class MainMenu implements Screen {
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
+
+        villains = new Villain();
+        villains.createDynamicVillainsBodiesFromMap(tiledMap, world);
 
         debugRenderer = new Box2DDebugRenderer();
     }
@@ -109,23 +114,15 @@ public class MainMenu implements Screen {
 
     private void updateCamera() {
         Vector2 positionPlayerTurtle = turtle.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
-        Gdx.app.log("POSITION TURTLE X PIXELS", Float.toString(positionPlayerTurtle.x * GameInfo.PPM));
-        Gdx.app.log("POSITION TURTLE Y PIXELS", Float.toString(positionPlayerTurtle.y * GameInfo.PPM));
 
         float mapWidthTiles = tiledMap.getProperties().get("width", Integer.class);
         float mapHeightTiles = tiledMap.getProperties().get("height", Integer.class);
-        Gdx.app.log("TILES MAP WIDTH", Float.toString(mapWidthTiles)); // 300
-        Gdx.app.log("TILES MAP HEIGHT", Float.toString(mapHeightTiles)); // 40
 
         float mapWidthPixels = mapWidthTiles * 32;
         float mapHeightPixels = mapHeightTiles * 32;
-        Gdx.app.log("PIXELS MAP WIDTH", Float.toString(mapWidthPixels)); // 300 * 32 = 9600
-        Gdx.app.log("PIXELS MAP HEIGHT", Float.toString(mapHeightPixels)); // 40 * 32 = 1280
 
         float cameraWidth = camera.viewportWidth;
         float cameraHeight = camera.viewportHeight;
-        Gdx.app.log("CAMERA WIDTH", Float.toString(cameraWidth)); // 960
-        Gdx.app.log("CAMERA HEIGHT", Float.toString(cameraHeight)); // 640
 
         float cameraX = Math.max(cameraWidth/2, Math.min(positionPlayerTurtle.x * GameInfo.PPM,
             mapWidthPixels - cameraWidth/2));
