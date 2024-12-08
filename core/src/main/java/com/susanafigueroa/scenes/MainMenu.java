@@ -1,4 +1,4 @@
-package scenes;
+package com.susanafigueroa.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,9 +14,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
 
-import bodiesmap.BodiesMap;
-import helpers.GameInfo;
-import player.Player;
+import com.susanafigueroa.bodiesmap.BodiesMap;
+import com.susanafigueroa.helpers.GameInfo;
+import com.susanafigueroa.player.Player;
 
 public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;

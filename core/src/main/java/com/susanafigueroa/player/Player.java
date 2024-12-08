@@ -1,4 +1,4 @@
-package player;
+package com.susanafigueroa.player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import helpers.GameInfo;
+import com.susanafigueroa.helpers.GameInfo;
 
 public class Player extends Sprite {
 

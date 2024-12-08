@@ -1,4 +1,4 @@
-package bodiesmap;
+package com.susanafigueroa.bodiesmap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import helpers.GameInfo;
+import com.susanafigueroa.helpers.GameInfo;
 
 public class BodiesMap {
 

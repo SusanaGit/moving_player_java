@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.susanafigueroa.MovingPlayer;
 
-import helpers.GameInfo;
+import com.susanafigueroa.helpers.GameInfo;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
