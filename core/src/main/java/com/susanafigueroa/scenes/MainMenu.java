@@ -18,6 +18,7 @@ import com.susanafigueroa.bodiesmap.BodiesMap;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.player.Player;
 import com.susanafigueroa.villains.Villain;
+import com.susanafigueroa.villains.VillainManage;
 
 public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;
@@ -25,9 +26,9 @@ public class MainMenu implements Screen {
     private StretchViewport viewport;
     private TiledMap tiledMap;
     private BodiesMap bodiesMap;
-    private Villain villains;
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player turtle;
+    private VillainManage villainManage;
     private World world;
     private Box2DDebugRenderer debugRenderer;
 
@@ -54,8 +55,8 @@ public class MainMenu implements Screen {
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
 
-        villains = new Villain();
-        villains.createDynamicVillainsBodiesFromMap(tiledMap, world);
+        villainManage = new VillainManage();
+        villainManage.createStaticSpriteVillains(tiledMap, world);
 
         debugRenderer = new Box2DDebugRenderer();
     }
@@ -152,6 +153,9 @@ public class MainMenu implements Screen {
 
         movingPlayer.getBatch().begin();
         movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
+        for(Villain villain: villainManage.getListVillains()) {
+            movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
+        }
         movingPlayer.getBatch().end();
 
         debugRenderer.render(world, camera.combined);
