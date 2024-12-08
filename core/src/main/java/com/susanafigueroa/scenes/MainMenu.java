@@ -22,7 +22,8 @@ import com.susanafigueroa.villains.VillainManage;
 
 public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;
-    private OrthographicCamera camera;
+    private OrthographicCamera mapCamera;
+    private OrthographicCamera box2DCamera;
     private StretchViewport viewport;
     private TiledMap tiledMap;
     private BodiesMap bodiesMap;
@@ -43,12 +44,25 @@ public class MainMenu implements Screen {
         tiledMap = mapLoader.load("mapa.tmx"); // tiledMap contiene toda la info del mapa
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
 
-        camera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
-        camera.setToOrtho(false, (float) GameInfo.WIDTH, (float) GameInfo.HEIGHT);
-        camera.position.set(GameInfo.WIDTH/2f , GameInfo.HEIGHT/2f, 0);
-        camera.update();
+        // camera for the map -> TiledMap -> pixels
+        mapCamera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
+        mapCamera.setToOrtho(false, (float) GameInfo.WIDTH, (float) GameInfo.HEIGHT);
+        mapCamera.position.set(
+            (GameInfo.WIDTH/2f) ,
+            (GameInfo.HEIGHT/2f),
+            0);
+        mapCamera.update();
 
-        viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, camera); // permite que el juego se vea bien en distintos dispositivos
+        // camera for the Box2D -> mmp
+        box2DCamera = new OrthographicCamera();
+        box2DCamera.setToOrtho(false, (float) GameInfo.WIDTH / GameInfo.PPM, (float) GameInfo.HEIGHT / GameInfo.PPM);
+        box2DCamera.position.set(
+            ((GameInfo.WIDTH/2f)/GameInfo.PPM),
+            (GameInfo.HEIGHT/2f)/GameInfo.PPM,
+            0);
+        box2DCamera.update();
+
+        viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, mapCamera); // permite que el juego se vea bien en distintos dispositivos
 
         turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
 
@@ -116,23 +130,28 @@ public class MainMenu implements Screen {
     private void updateCamera() {
         Vector2 positionPlayerTurtle = turtle.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
 
+        // pixels map
         float mapWidthTiles = tiledMap.getProperties().get("width", Integer.class);
         float mapHeightTiles = tiledMap.getProperties().get("height", Integer.class);
 
         float mapWidthPixels = mapWidthTiles * 32;
         float mapHeightPixels = mapHeightTiles * 32;
 
-        float cameraWidth = camera.viewportWidth;
-        float cameraHeight = camera.viewportHeight;
+        float cameraWidth = mapCamera.viewportWidth;
+        float cameraHeight = mapCamera.viewportHeight;
 
         float cameraX = Math.max(cameraWidth/2, Math.min(positionPlayerTurtle.x * GameInfo.PPM,
             mapWidthPixels - cameraWidth/2));
         float cameraY = Math.max(cameraHeight/2, Math.min(positionPlayerTurtle.y * GameInfo.PPM,
             mapHeightPixels - cameraHeight/2));
 
-        camera.position.set(cameraX, cameraY, 0);
+        // pixels cam TiledMap
+        mapCamera.position.set(cameraX, cameraY, 0);
+        mapCamera.update();
 
-        camera.update();
+        // mmp cam BoxD2
+        box2DCamera.position.set(cameraX / GameInfo.PPM, cameraY / GameInfo.PPM, 0);
+        box2DCamera.update();
     }
 
     @Override
@@ -146,10 +165,12 @@ public class MainMenu implements Screen {
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        mapRenderer.setView(camera);
+        mapRenderer.setView(mapCamera);
         mapRenderer.render();
 
-        movingPlayer.getBatch().setProjectionMatrix(camera.combined);
+        debugRenderer.render(world, box2DCamera.combined);
+
+        movingPlayer.getBatch().setProjectionMatrix(mapCamera.combined);
 
         movingPlayer.getBatch().begin();
         movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
@@ -157,8 +178,6 @@ public class MainMenu implements Screen {
             movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
         }
         movingPlayer.getBatch().end();
-
-        debugRenderer.render(world, camera.combined);
 
         // world contiene la info de los cuerpos, contactos, fuerzas físicas
         // step -> actualiza posiciones, velocidades, fuerzas de los objetos
