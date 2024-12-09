@@ -3,6 +3,8 @@ package com.susanafigueroa.scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,6 +17,7 @@ import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.player.Player;
+import com.susanafigueroa.timer.Timer;
 import com.susanafigueroa.villains.Villain;
 import com.susanafigueroa.villains.VillainManage;
 
@@ -22,6 +25,8 @@ public class MainMenu implements Screen {
     private MovingPlayer movingPlayer;
     private OrthographicCamera mapCamera;
     private OrthographicCamera box2DCamera;
+    // HUD -> Head-Up Display
+    private OrthographicCamera hudCamera;
     private StretchViewport viewport;
     private TiledMap tiledMap;
     private BodiesMap bodiesMap;
@@ -30,6 +35,7 @@ public class MainMenu implements Screen {
     private VillainManage villainManage;
     private World world;
     private Box2DDebugRenderer debugRenderer;
+    private Timer timer;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
@@ -60,7 +66,14 @@ public class MainMenu implements Screen {
             0);
         box2DCamera.update();
 
+        // camera for HUD -> pixels
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, GameInfo.WIDTH, GameInfo.HEIGHT);
+        hudCamera.update();
+
         viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, mapCamera); // permite que el juego se vea bien en distintos dispositivos
+
+        timer = new Timer(new BitmapFont(),120f);
 
         cuteGirl = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
 
@@ -128,6 +141,12 @@ public class MainMenu implements Screen {
             villain.villainIsWalking(delta);
             villain.drawVillainAnimation(movingPlayer.getBatch());
         }
+        movingPlayer.getBatch().end();
+
+        // HUD
+        movingPlayer.getBatch().setProjectionMatrix(hudCamera.combined);
+        movingPlayer.getBatch().begin();
+        timer.runTimer(movingPlayer.getBatch());
         movingPlayer.getBatch().end();
 
         // world contiene la info de los cuerpos, contactos, fuerzas físicas
