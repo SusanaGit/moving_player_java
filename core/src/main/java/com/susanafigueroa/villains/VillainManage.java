@@ -48,7 +48,7 @@ public class VillainManage {
             RectangleMapObject rectVillainObject = (RectangleMapObject) villainObject;
             Rectangle rectVillain = rectVillainObject.getRectangle();
             BodyDef bodyDefVillain = new BodyDef();
-            bodyDefVillain.type = BodyDef.BodyType.StaticBody;
+            bodyDefVillain.type = BodyDef.BodyType.DynamicBody;
             bodyDefVillain.position.set(
                 (rectVillain.x + rectVillain.width / 2)/ GameInfo.PPM,
                 (rectVillain.y + rectVillain.height / 2)/GameInfo.PPM

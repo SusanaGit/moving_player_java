@@ -126,6 +126,7 @@ public class MainMenu implements Screen {
         cuteGirl.drawPlayerAnimation(movingPlayer.getBatch());
         for(Villain villain: villainManage.getListVillains()) {
             movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
+            villain.updateVillain();
         }
         movingPlayer.getBatch().end();
 
