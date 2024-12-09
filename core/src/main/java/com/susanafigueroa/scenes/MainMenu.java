@@ -26,7 +26,7 @@ public class MainMenu implements Screen {
     private TiledMap tiledMap;
     private BodiesMap bodiesMap;
     private OrthogonalTiledMapRenderer mapRenderer;
-    private Player turtle;
+    private Player cuteGirl;
     private VillainManage villainManage;
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -62,7 +62,7 @@ public class MainMenu implements Screen {
 
         viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, mapCamera); // permite que el juego se vea bien en distintos dispositivos
 
-        turtle = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
+        cuteGirl = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
@@ -73,16 +73,12 @@ public class MainMenu implements Screen {
         debugRenderer = new Box2DDebugRenderer();
     }
 
-    public void update(float dt) {
-        turtle.handleInput(dt);
-    }
-
     @Override
     public void show() {
     }
 
     private void updateCamera() {
-        Vector2 positionPlayerTurtle = turtle.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
+        Vector2 positionPlayerTurtle = cuteGirl.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
 
         // pixels map
         float mapWidthTiles = tiledMap.getProperties().get("width", Integer.class);
@@ -111,11 +107,11 @@ public class MainMenu implements Screen {
     @Override
     public void render(float delta) {
 
-        update(delta);
+        cuteGirl.handleInput();
 
         updateCamera();
 
-        turtle.updatePlayer(delta);
+        cuteGirl.updatePlayer(delta);
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
@@ -127,7 +123,7 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().setProjectionMatrix(mapCamera.combined);
 
         movingPlayer.getBatch().begin();
-        turtle.drawPlayerAnimation(movingPlayer.getBatch());
+        cuteGirl.drawPlayerAnimation(movingPlayer.getBatch());
         for(Villain villain: villainManage.getListVillains()) {
             movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
         }
@@ -163,7 +159,7 @@ public class MainMenu implements Screen {
     public void dispose() {
         movingPlayer.getBatch().dispose();
         tiledMap.dispose();
-        turtle.getTexture().dispose();
+        cuteGirl.getTexture().dispose();
         debugRenderer.dispose();
     }
 }

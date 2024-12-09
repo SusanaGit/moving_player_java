@@ -42,6 +42,7 @@ public class Player extends Sprite {
     public Player(World world, String name, float x, float y) {
         super(new Texture(name));
         this.world = world;
+        this.elapsedTime = 0f;
         setSize(40f, 40f);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         createBody();
@@ -102,7 +103,7 @@ public class Player extends Sprite {
         shape.dispose();
     }
 
-    public void handleInput(float dt) {
+    public void handleInput() {
 
         isWalkingRight = false;
         isWalkingLeft = false;
