@@ -36,7 +36,7 @@ public class VillainManage {
             Gdx.app.log("GOOD VILLAINS!!!!!", "LAYER FOUND :)");
             Body newVillainBody = createStaticVillainBodyFromMap(mapObject, world);
 
-            Villain newVillain = new Villain(world, "villains/Idle (1).png", newVillainBody.getPosition().x, newVillainBody.getPosition().y);
+            Villain newVillain = new Villain(world, "villains/villain.png", newVillainBody.getPosition().x, newVillainBody.getPosition().y);
             newVillain.addBody(newVillainBody);
             listVillains.add(newVillain);
         }

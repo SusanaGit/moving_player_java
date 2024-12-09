@@ -1,7 +1,6 @@
 package com.susanafigueroa.scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
-
 import com.susanafigueroa.bodiesmap.BodiesMap;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.player.Player;
@@ -41,7 +39,7 @@ public class MainMenu implements Screen {
 
         // map configuration
         TmxMapLoader mapLoader = new TmxMapLoader(); // cargo el mapa con TmxMapLoader
-        tiledMap = mapLoader.load("mapa.tmx"); // tiledMap contiene toda la info del mapa
+        tiledMap = mapLoader.load("map/mapa.tmx"); // tiledMap contiene toda la info del mapa
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
 
         // camera for the map -> TiledMap -> pixels
@@ -53,7 +51,7 @@ public class MainMenu implements Screen {
             0);
         mapCamera.update();
 
-        // camera for the Box2D -> mmp
+        // camera for the Box2D -> ppm
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, (float) GameInfo.WIDTH / GameInfo.PPM, (float) GameInfo.HEIGHT / GameInfo.PPM);
         box2DCamera.position.set(
@@ -64,7 +62,7 @@ public class MainMenu implements Screen {
 
         viewport = new StretchViewport((float) GameInfo.WIDTH, (float) GameInfo.HEIGHT, mapCamera); // permite que el juego se vea bien en distintos dispositivos
 
-        turtle = new Player(world, "turtle.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
+        turtle = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);
@@ -76,51 +74,7 @@ public class MainMenu implements Screen {
     }
 
     public void update(float dt) {
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            turtle.getBody().applyLinearImpulse(
-                new Vector2( -20f, 0), turtle.getBody().getWorldCenter(), true
-            );
-        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            turtle.getBody().applyLinearImpulse(
-                new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
-            );
-        } else if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            turtle.getBody().applyLinearImpulse(
-                new Vector2( 0, +20f), turtle.getBody().getWorldCenter(), true
-            );
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            turtle.getBody().applyLinearImpulse(
-                new Vector2( 0, -20f), turtle.getBody().getWorldCenter(), true
-            );
-        }
-
-
-        if (Gdx.input.isTouched()) {
-            float valueTouchX = Gdx.input.getX();
-            float valueTouchY = Gdx.input.getY();
-            float screenWidth = Gdx.graphics.getWidth();
-            float screenHeight = Gdx.graphics.getHeight();
-
-            if (valueTouchX < screenWidth / 2) {
-                turtle.getBody().applyLinearImpulse(
-                    new Vector2(-20f, 0), turtle.getBody().getWorldCenter(), true
-                );
-            } else {
-                turtle.getBody().applyLinearImpulse(
-                    new Vector2(+20f, 0), turtle.getBody().getWorldCenter(), true
-                );
-            }
-
-            if (valueTouchY > screenHeight / 2) {
-                turtle.getBody().applyLinearImpulse(
-                    new Vector2(0, -20f), turtle.getBody().getWorldCenter(), true
-                );
-            } else {
-                turtle.getBody().applyLinearImpulse(
-                    new Vector2(0, +20f), turtle.getBody().getWorldCenter(), true
-                );
-            }
-        }
+        turtle.handleInput(dt);
     }
 
     @Override
@@ -149,7 +103,7 @@ public class MainMenu implements Screen {
         mapCamera.position.set(cameraX, cameraY, 0);
         mapCamera.update();
 
-        // mmp cam BoxD2
+        // ppm cam BoxD2
         box2DCamera.position.set(cameraX / GameInfo.PPM, cameraY / GameInfo.PPM, 0);
         box2DCamera.update();
     }
@@ -161,7 +115,7 @@ public class MainMenu implements Screen {
 
         updateCamera();
 
-        turtle.updatePlayer();
+        turtle.updatePlayer(delta);
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
@@ -173,7 +127,7 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().setProjectionMatrix(mapCamera.combined);
 
         movingPlayer.getBatch().begin();
-        movingPlayer.getBatch().draw(turtle, turtle.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
+        turtle.drawPlayerAnimation(movingPlayer.getBatch());
         for(Villain villain: villainManage.getListVillains()) {
             movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
         }
