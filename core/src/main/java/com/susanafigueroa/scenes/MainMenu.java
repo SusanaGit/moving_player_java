@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
+import com.susanafigueroa.contactplayervillain.ContactPlayerVillain;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.player.Player;
 import com.susanafigueroa.timer.Timer;
@@ -36,6 +36,7 @@ public class MainMenu implements Screen {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private Timer timer;
+    private ContactPlayerVillain contactPlayerVillain;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
@@ -82,6 +83,9 @@ public class MainMenu implements Screen {
 
         villainManage = new VillainManage();
         villainManage.createStaticSpriteVillains(tiledMap, world);
+
+        contactPlayerVillain = new ContactPlayerVillain(timer);
+        world.setContactListener(contactPlayerVillain);
 
         debugRenderer = new Box2DDebugRenderer();
     }
@@ -149,9 +153,6 @@ public class MainMenu implements Screen {
         timer.runTimer(movingPlayer.getBatch());
         movingPlayer.getBatch().end();
 
-        // world contiene la info de los cuerpos, contactos, fuerzas físicas
-        // step -> actualiza posiciones, velocidades, fuerzas de los objetos
-        // DeltaTime -> devuelve el tiempo desde el último fotograma
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 

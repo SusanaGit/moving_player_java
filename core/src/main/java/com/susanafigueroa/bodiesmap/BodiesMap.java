@@ -1,6 +1,5 @@
 package com.susanafigueroa.bodiesmap;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-
 import com.susanafigueroa.helpers.GameInfo;
 
 public class BodiesMap {
@@ -22,21 +20,16 @@ public class BodiesMap {
 
         MapLayer collisionLayer = map.getLayers().get(nameCollisionLayer);
         if (collisionLayer == null) {
-            Gdx.app.log("!!!!!", "LAYER NOT FOUND :(");
             return;
         }
 
-
         for (MapObject mapObject : collisionLayer.getObjects()) {
-            Gdx.app.log("GOOD!!!!!", "LAYER FOUND :)");
-
             createStaticBody(mapObject, world);
         }
     }
 
     private void createStaticBody(MapObject mapObject, World world) {
         if (mapObject instanceof RectangleMapObject) {
-            Gdx.app.log("GOOD!!!!!", "INSTANCEOF RectangleMapObject, im so happy");
 
             RectangleMapObject rectObject = (RectangleMapObject) mapObject;
             Rectangle rect = rectObject.getRectangle();

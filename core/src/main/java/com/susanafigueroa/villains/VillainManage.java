@@ -1,6 +1,5 @@
 package com.susanafigueroa.villains;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -28,12 +28,10 @@ public class VillainManage {
     public void createStaticSpriteVillains(TiledMap map, World world) {
         MapLayer collisionLayer = map.getLayers().get(nameCollisionLayer);
         if (collisionLayer == null) {
-            Gdx.app.log("ERROR VILLAINS!!!!!", "LAYER NOT FOUND :(");
             return;
         }
 
         for (MapObject mapObject : collisionLayer.getObjects()) {
-            Gdx.app.log("GOOD VILLAINS!!!!!", "LAYER FOUND :)");
             Body newVillainBody = createStaticVillainBodyFromMap(mapObject, world);
 
             Villain newVillain = new Villain(world, "villains/villain.png", newVillainBody.getPosition().x, newVillainBody.getPosition().y);
@@ -44,7 +42,6 @@ public class VillainManage {
 
     private Body createStaticVillainBodyFromMap(MapObject villainObject, World world) {
         if (villainObject instanceof RectangleMapObject) {
-            Gdx.app.log("GOOD!!!!!", "INSTANCEOF RectangleMapObject, im so happy");
             RectangleMapObject rectVillainObject = (RectangleMapObject) villainObject;
             Rectangle rectVillain = rectVillainObject.getRectangle();
             BodyDef bodyDefVillain = new BodyDef();
@@ -62,7 +59,10 @@ public class VillainManage {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
             fixtureDef.density = 20f;
-            villainBody.createFixture(fixtureDef);
+            Fixture villainFixture = villainBody.createFixture(fixtureDef);
+
+            villainFixture.setUserData(this);
+
             shape.dispose();
 
             return villainBody;
