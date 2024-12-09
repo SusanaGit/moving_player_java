@@ -78,7 +78,7 @@ public class MainMenu implements Screen {
     }
 
     private void updateCamera() {
-        Vector2 positionPlayerTurtle = cuteGirl.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
+        Vector2 positionPlayerCuteGirl = cuteGirl.getBody().getPosition(); // 4,8ppm x | 3,2ppm y
 
         // pixels map
         float mapWidthTiles = tiledMap.getProperties().get("width", Integer.class);
@@ -90,9 +90,9 @@ public class MainMenu implements Screen {
         float cameraWidth = mapCamera.viewportWidth;
         float cameraHeight = mapCamera.viewportHeight;
 
-        float cameraX = Math.max(cameraWidth/2, Math.min(positionPlayerTurtle.x * GameInfo.PPM,
+        float cameraX = Math.max(cameraWidth/2, Math.min(positionPlayerCuteGirl.x * GameInfo.PPM,
             mapWidthPixels - cameraWidth/2));
-        float cameraY = Math.max(cameraHeight/2, Math.min(positionPlayerTurtle.y * GameInfo.PPM,
+        float cameraY = Math.max(cameraHeight/2, Math.min(positionPlayerCuteGirl.y * GameInfo.PPM,
             mapHeightPixels - cameraHeight/2));
 
         // pixels cam TiledMap
@@ -125,8 +125,8 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().begin();
         cuteGirl.drawPlayerAnimation(movingPlayer.getBatch());
         for(Villain villain: villainManage.getListVillains()) {
-            movingPlayer.getBatch().draw(villain, villain.getX(), villain.getY(), villain.getWidth(), villain.getHeight());
-            villain.updateVillain();
+            villain.villainIsWalking(delta);
+            villain.drawVillainAnimation(movingPlayer.getBatch());
         }
         movingPlayer.getBatch().end();
 

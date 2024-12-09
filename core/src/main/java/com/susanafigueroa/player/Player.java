@@ -15,17 +15,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.helpers.GameInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Player extends Sprite {
 
     private World world;
     private Body body;
-    private MovingPlayer movingPlayer;
 
     // animation
     private TextureAtlas playerAtlas;
@@ -205,5 +200,4 @@ public class Player extends Sprite {
     public Body getBody() {
         return this.body;
     }
-
 }
