@@ -16,6 +16,10 @@ import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
 import com.susanafigueroa.contactplayervillain.ContactPlayerVillain;
 import com.susanafigueroa.helpers.GameInfo;
+import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
+import com.susanafigueroa.magicalobjects.chandelier.ChandelierManage;
+import com.susanafigueroa.magicalobjects.chest.Chest;
+import com.susanafigueroa.magicalobjects.chest.ChestManage;
 import com.susanafigueroa.player.Player;
 import com.susanafigueroa.timer.Timer;
 import com.susanafigueroa.villains.Villain;
@@ -33,6 +37,8 @@ public class MainMenu implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private Player cuteGirl;
     private VillainManage villainManage;
+    private ChandelierManage chandelierManage;
+    private ChestManage chestManage;
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private Timer timer;
@@ -83,6 +89,12 @@ public class MainMenu implements Screen {
 
         villainManage = new VillainManage();
         villainManage.createStaticSpriteVillains(tiledMap, world);
+
+        chandelierManage = new ChandelierManage();
+        chandelierManage.createStaticSpriteChandeliers(tiledMap, world);
+
+        chestManage = new ChestManage();
+        chestManage.createStaticSpriteChests(tiledMap, world);
 
         contactPlayerVillain = new ContactPlayerVillain(timer);
         world.setContactListener(contactPlayerVillain);
@@ -144,6 +156,12 @@ public class MainMenu implements Screen {
         for(Villain villain: villainManage.getListVillains()) {
             villain.villainIsWalking(delta);
             villain.drawVillainAnimation(movingPlayer.getBatch());
+        }
+        for(Chest chest: chestManage.getListChests()) {
+            chest.drawChest(movingPlayer.getBatch());
+        }
+        for(Chandelier chandelier: chandelierManage.getListChandeliers()) {
+            chandelier.drawChandelier(movingPlayer.getBatch());
         }
         movingPlayer.getBatch().end();
 
