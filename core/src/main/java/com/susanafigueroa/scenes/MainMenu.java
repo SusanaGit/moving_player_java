@@ -97,7 +97,7 @@ public class MainMenu implements Screen {
         chestManage = new ChestManage();
         chestManage.createStaticSpriteChests(tiledMap, world);
 
-        contactMovingPlayer = new ContactMovingPlayer(timer, chandelierManage, chestManage);
+        contactMovingPlayer = new ContactMovingPlayer(timer, chandelierManage, chestManage, villainManage);
         world.setContactListener(contactMovingPlayer);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -145,6 +145,7 @@ public class MainMenu implements Screen {
 
         chestManage.updateListChests();
         chandelierManage.updateListChandeliers();
+        villainManage.updateListVillains();
 
         cuteGirl.updatePlayer(delta);
 

@@ -269,6 +269,11 @@ public class Player extends Sprite {
 
         Bullet bullet = bulletPool.obtain();
         float positionYBullet = (body.getPosition().y * GameInfo.PPM) - getHeight() / 2;
+
+        if (bullet.getBody() == null) {
+            bullet.createBody();
+        }
+
         bullet.setElapsedTime(0);
 
         if (right) {
@@ -290,7 +295,10 @@ public class Player extends Sprite {
         for(int i = 0; i < bullets.size; i++) {
             Bullet bullet = bullets.get(i);
            if(bullet.isFinished()) {
-               world.destroyBody(bullet.getBody());
+
+               if (bullet.getBody() != null) {
+                   world.destroyBody(bullet.getBody());
+               }
                bullet.setElapsedTime(0);
                bulletPool.free(bullet);
                bullets.removeIndex(i);

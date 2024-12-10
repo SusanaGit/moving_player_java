@@ -1,5 +1,6 @@
 package com.susanafigueroa.villains;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -7,11 +8,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.susanafigueroa.helpers.GameInfo;
+import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class VillainManage {
 
     private List<Villain> listVillains = new ArrayList<>();
+    private List<Villain> listVillainsToRemove = new ArrayList<>();
     private String nameCollisionLayer = "villains_layer";
 
     public List<Villain> getListVillains() {
@@ -59,9 +61,7 @@ public class VillainManage {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
             fixtureDef.density = 20f;
-            Fixture villainFixture = villainBody.createFixture(fixtureDef);
-
-            villainFixture.setUserData(this);
+            villainBody.createFixture(fixtureDef);
 
             shape.dispose();
 
@@ -69,5 +69,29 @@ public class VillainManage {
         } else {
             return null;
         }
+    }
+
+    public void removeVillain(Villain villainToRemove) {
+        if (!listVillainsToRemove.contains(villainToRemove)) {
+            listVillainsToRemove.add(villainToRemove);
+        }
+    }
+
+    public void updateListVillains() {
+        for (Villain villainToRemove : listVillainsToRemove) {
+            Texture villainTextureToRemove = villainToRemove.getTexture();
+            Body villainBodyToRemove = villainToRemove.getVillainBody();
+
+            if (villainToRemove != null) {
+                villainBodyToRemove.getWorld().destroyBody(villainBodyToRemove);
+            }
+
+            if (villainTextureToRemove != null) {
+                villainTextureToRemove.dispose();
+            }
+
+            listVillains.remove(villainToRemove);
+        }
+        listVillainsToRemove.clear();
     }
 }

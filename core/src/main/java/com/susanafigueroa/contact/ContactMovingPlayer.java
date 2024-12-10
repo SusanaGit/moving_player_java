@@ -6,12 +6,14 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.susanafigueroa.bullet.Bullet;
 import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
 import com.susanafigueroa.magicalobjects.chandelier.ChandelierManage;
 import com.susanafigueroa.magicalobjects.chest.Chest;
 import com.susanafigueroa.magicalobjects.chest.ChestManage;
 import com.susanafigueroa.player.Player;
 import com.susanafigueroa.timer.Timer;
+import com.susanafigueroa.villains.Villain;
 import com.susanafigueroa.villains.VillainManage;
 
 public class ContactMovingPlayer implements ContactListener {
@@ -19,11 +21,13 @@ public class ContactMovingPlayer implements ContactListener {
     private Timer timer;
     private ChandelierManage chandelierManage;
     private ChestManage chestManage;
+    private VillainManage villainManage;
 
-    public ContactMovingPlayer(Timer timer, ChandelierManage chandelierManage, ChestManage chestManage) {
+    public ContactMovingPlayer(Timer timer, ChandelierManage chandelierManage, ChestManage chestManage, VillainManage villainManage) {
         this.timer = timer;
         this.chandelierManage = chandelierManage;
         this.chestManage = chestManage;
+        this.villainManage = villainManage;
     }
 
     @Override
@@ -31,8 +35,8 @@ public class ContactMovingPlayer implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
-        if ((fixtureA.getUserData() instanceof Player && fixtureB.getUserData() instanceof VillainManage) ||
-            (fixtureB.getUserData() instanceof Player && fixtureA.getUserData() instanceof VillainManage)) {
+        if ((fixtureA.getUserData() instanceof Player && fixtureB.getUserData() instanceof Villain) ||
+            (fixtureB.getUserData() instanceof Player && fixtureA.getUserData() instanceof Villain)) {
             Gdx.app.log("CONTACT VILLAIN WITH PLAYER", fixtureA.getUserData().toString() + fixtureB.getUserData().toString());
             timer.reduceTimer();
 
@@ -61,6 +65,16 @@ public class ContactMovingPlayer implements ContactListener {
             }
 
             timer.plusTimer();
+
+        } else if ((fixtureA.getUserData() instanceof Bullet && fixtureB.getUserData() instanceof Villain) ||
+            (fixtureB.getUserData() instanceof Bullet && fixtureA.getUserData() instanceof Villain)
+        ) {
+            Gdx.app.log("CONTACT BULLET WITH VILLAIN ", fixtureA.getUserData().toString() + " | " + fixtureB.getUserData().toString());
+            if (fixtureA.getUserData() instanceof Villain) {
+                villainManage.removeVillain((Villain) fixtureA.getUserData());
+            } else {
+                villainManage.removeVillain((Villain) fixtureB.getUserData());
+            }
         }
     }
 

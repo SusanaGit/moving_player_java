@@ -29,7 +29,7 @@ public class Bullet extends Sprite {
         super(new Texture(name));
         this.world = world;
         this.elapsedTime = 0f;
-        setSize(32f, 32f);
+        setSize(100f, 100f);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         createBody();
 
@@ -54,6 +54,7 @@ public class Bullet extends Sprite {
     }
 
     public void createBody() {
+
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -78,7 +79,6 @@ public class Bullet extends Sprite {
         fixtureDef.restitution = 0.1f;
 
         Fixture bulletFixture = body.createFixture(fixtureDef);
-
         bulletFixture.setUserData(this);
 
         shape.dispose();

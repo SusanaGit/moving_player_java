@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.susanafigueroa.helpers.GameInfo;
@@ -80,8 +81,15 @@ public class Villain extends Sprite {
 
     }
 
+    public Body getVillainBody() {
+        return this.body;
+    }
+
     public void addBody(Body villainBody) {
         this.body = villainBody;
+        for (Fixture fixture : villainBody.getFixtureList()) {
+            fixture.setUserData(this);
+        }
     }
 
     public void updateVillainPositionBody() {
