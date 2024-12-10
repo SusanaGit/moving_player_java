@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.susanafigueroa.helpers.GameInfo;
-import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
 
 import java.util.ArrayList;
 import java.util.List;

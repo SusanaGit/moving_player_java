@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -303,6 +304,14 @@ public class Player extends Sprite {
                bulletPool.free(bullet);
                bullets.removeIndex(i);
            }
+        }
+    }
+
+    public void messageGameOver(SpriteBatch batch) {
+        if (isDying) {
+            BitmapFont font = new BitmapFont();
+            String showGameOver = "GAME OVER";
+            font.draw(batch, showGameOver, GameInfo.WIDTH - (float) GameInfo.WIDTH/2, (float) GameInfo.WIDTH/2);
         }
     }
 }

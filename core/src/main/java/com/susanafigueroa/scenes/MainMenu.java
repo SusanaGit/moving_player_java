@@ -52,12 +52,12 @@ public class MainMenu implements Screen {
         world = new World(new Vector2(0, -9.8f), true);
 
         // map configuration
-        TmxMapLoader mapLoader = new TmxMapLoader(); // cargo el mapa con TmxMapLoader
-        tiledMap = mapLoader.load("map/mapa.tmx"); // tiledMap contiene toda la info del mapa
-        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap); // renderiza el mapa en la pantalla
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        tiledMap = mapLoader.load("map/mapa.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // camera for the map -> TiledMap -> pixels
-        mapCamera = new OrthographicCamera(); // define el mundo que se mostrará en pantalla
+        mapCamera = new OrthographicCamera();
         mapCamera.setToOrtho(false, (float) GameInfo.WIDTH, (float) GameInfo.HEIGHT);
         mapCamera.position.set(
             (GameInfo.WIDTH/2f) ,
@@ -184,6 +184,7 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().setProjectionMatrix(hudCamera.combined);
         movingPlayer.getBatch().begin();
         timer.runTimer(movingPlayer.getBatch());
+        cuteGirl.messageGameOver(movingPlayer.getBatch());
         movingPlayer.getBatch().end();
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
