@@ -13,18 +13,12 @@ import com.susanafigueroa.magicalobjects.chest.ChestManage;
 import com.susanafigueroa.player.Player;
 import com.susanafigueroa.timer.Timer;
 import com.susanafigueroa.villains.VillainManage;
-import com.susanafigueroa.villains.Villain;
-
-import java.util.List;
 
 public class ContactMovingPlayer implements ContactListener {
 
     private Timer timer;
     private ChandelierManage chandelierManage;
     private ChestManage chestManage;
-    private List<Chandelier> chandeliersToRemove;
-    private List<Chest> chestsToRemove;
-    private List<Villain> villainsToRemove;
 
     public ContactMovingPlayer(Timer timer, ChandelierManage chandelierManage, ChestManage chestManage) {
         this.timer = timer;

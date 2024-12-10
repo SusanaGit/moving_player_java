@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
+import com.susanafigueroa.bullet.Bullet;
 import com.susanafigueroa.contact.ContactMovingPlayer;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
@@ -136,6 +137,8 @@ public class MainMenu implements Screen {
     @Override
     public void render(float delta) {
 
+        cuteGirl.cleanBullets();
+
         cuteGirl.handleInput();
 
         updateCamera();
@@ -155,6 +158,14 @@ public class MainMenu implements Screen {
         movingPlayer.getBatch().setProjectionMatrix(mapCamera.combined);
 
         movingPlayer.getBatch().begin();
+
+        for (Bullet bullet: cuteGirl.getBullets()) {
+            if (bullet != null) {
+                bullet.updateBullet(delta);
+                bullet.drawBulletAnimation(movingPlayer.getBatch());
+            }
+        }
+
         cuteGirl.drawPlayerAnimation(movingPlayer.getBatch());
         for(Villain villain: villainManage.getListVillains()) {
             villain.villainIsWalking(delta);

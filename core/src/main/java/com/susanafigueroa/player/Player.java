@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.susanafigueroa.bullet.Bullet;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.timer.Timer;
 
@@ -35,7 +37,15 @@ public class Player extends Sprite {
     private boolean isWalkingLeft;
     private boolean isJumping;
     private boolean isDying;
+
+    // timer
     private Timer timer;
+
+    // bullets
+    private Pool<Bullet> bulletPool;
+    private Array<Bullet> bullets;
+    private Boolean right = false;
+    private Boolean left = false;
 
     public Player(World world, String name, float x, float y, Timer timer) {
         super(new Texture(name));
@@ -80,6 +90,24 @@ public class Player extends Sprite {
         dyingFrames.add(playerAtlas.findRegion("Dead (17)"));
         dyingFrames.add(playerAtlas.findRegion("Dead (30)"));
         dyingAnimation = new Animation<>(1f / 4f, dyingFrames);
+
+        // bullets
+        bullets = new Array<>();
+        bulletPool = new Pool<Bullet>(2) {
+            @Override
+            protected Bullet newObject() {
+                return new Bullet(world, "bullet/b1.png", 0, 0);
+            }
+        };
+    }
+
+    public Body getBody() {
+        return this.body;
+    }
+
+
+    public Array<Bullet> getBullets() {
+        return bullets;
     }
 
     public void createBody() {
@@ -120,11 +148,15 @@ public class Player extends Sprite {
         if (!isDying) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 isWalkingLeft = true;
+                right = false;
+                left = true;
                 body.applyLinearImpulse(
                     new Vector2(-3f, 0), body.getWorldCenter(), true
                 );
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 isWalkingRight = true;
+                left = false;
+                right = true;
                 body.applyLinearImpulse(
                     new Vector2(+3f, 0), body.getWorldCenter(), true
                 );
@@ -138,6 +170,8 @@ public class Player extends Sprite {
                 body.applyLinearImpulse(
                     new Vector2(0, -3f), body.getWorldCenter(), true
                 );
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                shoot();
             }
 
             if (Gdx.input.isTouched()) {
@@ -152,11 +186,15 @@ public class Player extends Sprite {
 
                 if (valueTouchX < screenWidth / 2) {
                     isWalkingLeft = true;
+                    right = false;
+                    left = true;
                     body.applyLinearImpulse(
                         new Vector2(-3f, 0), body.getWorldCenter(), true
                     );
                 } else {
                     isWalkingRight = true;
+                    left = false;
+                    right = true;
                     body.applyLinearImpulse(
                         new Vector2(+3f, 0), body.getWorldCenter(), true
                     );
@@ -172,6 +210,10 @@ public class Player extends Sprite {
                     body.applyLinearImpulse(
                         new Vector2(0, +3f), body.getWorldCenter(), true
                     );
+                }
+
+                if (Gdx.input.justTouched()) {
+                    shoot();
                 }
             }
         }
@@ -223,7 +265,37 @@ public class Player extends Sprite {
         );
     }
 
-    public Body getBody() {
-        return this.body;
+    private void shoot() {
+
+        Bullet bullet = bulletPool.obtain();
+        float positionYBullet = (body.getPosition().y * GameInfo.PPM) - getHeight() / 2;
+
+        Gdx.app.log("DIRECTION", "Right: " + right + " Left: " + left);
+
+        if (right) {
+            float positionXBulletRight = ((body.getPosition().x * GameInfo.PPM) - getWidth() / 2) + 80;
+            bullet.getBody().setTransform(positionXBulletRight / GameInfo.PPM, positionYBullet / GameInfo.PPM, 0);
+            bullet.getBody().setLinearVelocity(2f, 0);
+        }
+
+        if (left) {
+            float positionXBulletLeft = ((body.getPosition().x * GameInfo.PPM) - getWidth() / 2) - 50;
+            bullet.getBody().setTransform(positionXBulletLeft / GameInfo.PPM, positionYBullet / GameInfo.PPM, 0);
+            bullet.getBody().setLinearVelocity(-2f, 0);
+        }
+
+        bullets.add(bullet);
+    }
+
+    public void cleanBullets() {
+        for(int i = 0; i < bullets.size; i++) {
+            Bullet bullet = bullets.get(i);
+           if(bullet.isFinished()) {
+               world.destroyBody(bullet.getBody());
+               bullet.setElapsedTime(0);
+               bulletPool.free(bullet);
+               bullets.removeIndex(i);
+           }
+        }
     }
 }
