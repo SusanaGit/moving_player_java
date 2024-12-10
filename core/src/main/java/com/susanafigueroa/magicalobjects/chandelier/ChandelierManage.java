@@ -1,6 +1,7 @@
 package com.susanafigueroa.magicalobjects.chandelier;
 
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -20,6 +20,7 @@ import java.util.List;
 public class ChandelierManage {
 
     private List<Chandelier> listChandeliers = new ArrayList<>();
+    private List<Chandelier> listChandeliersToRemove = new ArrayList<>();
     private String nameCollisionLayer = "chandeliers_layer";
     public List<Chandelier> getListChandeliers() {
         return listChandeliers;
@@ -35,7 +36,7 @@ public class ChandelierManage {
             Body newChandelierBody = createStaticChandelierBodyFromMap(mapObject, world);
 
             Chandelier newChandelier = new Chandelier(world, "magicalobjects/chandelier.png", newChandelierBody.getPosition().x, newChandelierBody.getPosition().y);
-            newChandelier.addBody(newChandelierBody);
+            newChandelier.setBody(newChandelierBody);
             listChandeliers.add(newChandelier);
         }
     }
@@ -59,9 +60,7 @@ public class ChandelierManage {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
             fixtureDef.density = 20f;
-
-            Fixture chandelierFixture = chandelierBody.createFixture(fixtureDef);
-            chandelierFixture.setUserData(this);
+            chandelierBody.createFixture(fixtureDef);
 
             shape.dispose();
 
@@ -69,5 +68,29 @@ public class ChandelierManage {
         } else {
             return null;
         }
+    }
+
+    public void removeChandelier(Chandelier chandelierToRemove) {
+        if (!listChandeliersToRemove.contains(chandelierToRemove)) {
+            listChandeliersToRemove.add(chandelierToRemove);
+        }
+    }
+
+    public void updateListChandeliers() {
+        for (Chandelier chandelierToRemove : listChandeliersToRemove) {
+            Texture chandelierTextureToRemove = chandelierToRemove.getTexture();
+            Body chandelierBodyToRemove = chandelierToRemove.getChandelierBody();
+
+            if (chandelierBodyToRemove != null) {
+                chandelierBodyToRemove.getWorld().destroyBody(chandelierBodyToRemove);
+            }
+
+            if (chandelierTextureToRemove != null) {
+                chandelierTextureToRemove.dispose();
+            }
+
+            listChandeliers.remove(chandelierToRemove);
+        }
+        listChandeliersToRemove.clear();
     }
 }

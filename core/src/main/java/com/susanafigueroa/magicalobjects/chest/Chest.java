@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.susanafigueroa.helpers.GameInfo;
 
@@ -25,8 +26,11 @@ public class Chest extends Sprite {
         setPosition(xPixels - getWidth() / 2, yPixels - getHeight() / 2);
     }
 
-    public void addBody(Body chestBody) {
+    public void setBody(Body chestBody) {
         this.chestBody = chestBody;
+        for (Fixture fixture : chestBody.getFixtureList()) {
+            fixture.setUserData(this);
+        }
     }
 
     public Body getChestBody() {

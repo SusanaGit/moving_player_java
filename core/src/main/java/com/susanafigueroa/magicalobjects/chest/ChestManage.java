@@ -1,5 +1,6 @@
 package com.susanafigueroa.magicalobjects.chest;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -7,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -18,12 +18,12 @@ import java.util.List;
 
 public class ChestManage {
     private List<Chest> listChests = new ArrayList<>();
+    private List<Chest> listChestsToRemove = new ArrayList<>();
     private String nameCollisionLayer = "chests_layer";
 
     public List<Chest> getListChests() {
         return listChests;
     }
-
 
     public void createStaticSpriteChests(TiledMap map, World world) {
         MapLayer collisionLayer = map.getLayers().get(nameCollisionLayer);
@@ -35,7 +35,7 @@ public class ChestManage {
             Body newChestBody = createStaticChestBodyFromMap(mapObject, world);
 
             Chest newChest = new Chest(world, "magicalobjects/chest.png", newChestBody.getPosition().x, newChestBody.getPosition().y);
-            newChest.addBody(newChestBody);
+            newChest.setBody(newChestBody);
 
             listChests.add(newChest);
         }
@@ -61,8 +61,7 @@ public class ChestManage {
             fixtureDef.shape = shape;
             fixtureDef.density = 20f;
 
-            Fixture chestFixture = chestBody.createFixture(fixtureDef);
-            chestFixture.setUserData(this);
+            chestBody.createFixture(fixtureDef);
 
             shape.dispose();
 
@@ -73,8 +72,27 @@ public class ChestManage {
     }
 
     public void removeChest(Chest chestToRemove) {
-        chestToRemove.getChestBody().getWorld().destroyBody(chestToRemove.getChestBody());
-        listChests.remove(chestToRemove);
+        if (!listChestsToRemove.contains(chestToRemove)) {
+            listChestsToRemove.add(chestToRemove);
+        }
     }
 
+    public void updateListChests() {
+        for (Chest chestToRemove : listChestsToRemove) {
+            Texture chestTextureToRemove = chestToRemove.getTexture();
+            Body chestBodyToRemove = chestToRemove.getChestBody();
+
+            if (chestBodyToRemove != null) {
+                chestBodyToRemove.getWorld().destroyBody(chestBodyToRemove);
+            }
+
+            if (chestTextureToRemove != null) {
+                chestTextureToRemove.dispose();
+            }
+
+            listChests.remove(chestToRemove);
+        }
+
+        listChestsToRemove.clear();
+    }
 }
