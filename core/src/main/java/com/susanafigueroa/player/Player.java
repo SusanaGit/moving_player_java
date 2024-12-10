@@ -269,19 +269,18 @@ public class Player extends Sprite {
 
         Bullet bullet = bulletPool.obtain();
         float positionYBullet = (body.getPosition().y * GameInfo.PPM) - getHeight() / 2;
-
-        Gdx.app.log("DIRECTION", "Right: " + right + " Left: " + left);
+        bullet.setElapsedTime(0);
 
         if (right) {
             float positionXBulletRight = ((body.getPosition().x * GameInfo.PPM) - getWidth() / 2) + 80;
             bullet.getBody().setTransform(positionXBulletRight / GameInfo.PPM, positionYBullet / GameInfo.PPM, 0);
-            bullet.getBody().setLinearVelocity(2f, 0);
+            bullet.getBody().setLinearVelocity(10f, 0);
         }
 
         if (left) {
             float positionXBulletLeft = ((body.getPosition().x * GameInfo.PPM) - getWidth() / 2) - 50;
             bullet.getBody().setTransform(positionXBulletLeft / GameInfo.PPM, positionYBullet / GameInfo.PPM, 0);
-            bullet.getBody().setLinearVelocity(-2f, 0);
+            bullet.getBody().setLinearVelocity(-10f, 0);
         }
 
         bullets.add(bullet);
