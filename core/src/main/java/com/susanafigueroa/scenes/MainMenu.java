@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.susanafigueroa.MovingPlayer;
 import com.susanafigueroa.bodiesmap.BodiesMap;
-import com.susanafigueroa.contactplayervillain.ContactPlayerVillain;
+import com.susanafigueroa.contact.ContactMovingPlayer;
 import com.susanafigueroa.helpers.GameInfo;
 import com.susanafigueroa.magicalobjects.chandelier.Chandelier;
 import com.susanafigueroa.magicalobjects.chandelier.ChandelierManage;
@@ -42,7 +42,7 @@ public class MainMenu implements Screen {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private Timer timer;
-    private ContactPlayerVillain contactPlayerVillain;
+    private ContactMovingPlayer contactMovingPlayer;
 
     public MainMenu(MovingPlayer movingPlayer) {
         this.movingPlayer = movingPlayer;
@@ -96,8 +96,8 @@ public class MainMenu implements Screen {
         chestManage = new ChestManage();
         chestManage.createStaticSpriteChests(tiledMap, world);
 
-        contactPlayerVillain = new ContactPlayerVillain(timer);
-        world.setContactListener(contactPlayerVillain);
+        contactMovingPlayer = new ContactMovingPlayer(timer);
+        world.setContactListener(contactMovingPlayer);
 
         debugRenderer = new Box2DDebugRenderer();
     }
