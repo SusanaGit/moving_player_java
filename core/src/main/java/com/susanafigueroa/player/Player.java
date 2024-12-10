@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.susanafigueroa.helpers.GameInfo;
+import com.susanafigueroa.timer.Timer;
 
 public class Player extends Sprite {
 
@@ -34,11 +35,13 @@ public class Player extends Sprite {
     private boolean isWalkingLeft;
     private boolean isJumping;
     private boolean isDying;
+    private Timer timer;
 
-    public Player(World world, String name, float x, float y) {
+    public Player(World world, String name, float x, float y, Timer timer) {
         super(new Texture(name));
         this.world = world;
         this.elapsedTime = 0f;
+        this.timer = timer;
         setSize(40f, 40f);
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         createBody();
@@ -69,6 +72,14 @@ public class Player extends Sprite {
         walkLeft2.flip(true, false);
         walkingLeftFrames.add(walkLeft2);
         walkingLeftAnimation = new Animation<>(1f / 5f, walkingLeftFrames);
+
+        // player dying
+        Array<TextureRegion> dyingFrames = new Array<>();
+        dyingFrames.add(playerAtlas.findRegion("Dead (1)"));
+        dyingFrames.add(playerAtlas.findRegion("Dead (6)"));
+        dyingFrames.add(playerAtlas.findRegion("Dead (17)"));
+        dyingFrames.add(playerAtlas.findRegion("Dead (30)"));
+        dyingAnimation = new Animation<>(1f / 4f, dyingFrames);
     }
 
     public void createBody() {
@@ -106,60 +117,62 @@ public class Player extends Sprite {
         isWalkingRight = false;
         isWalkingLeft = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            isWalkingLeft = true;
-            body.applyLinearImpulse(
-                new Vector2(-3f, 0), body.getWorldCenter(), true
-            );
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            isWalkingRight = true;
-            body.applyLinearImpulse(
-                new Vector2(+3f, 0), body.getWorldCenter(), true
-            );
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            isJumping = true;
-            body.applyLinearImpulse(
-                new Vector2(0, +3f), body.getWorldCenter(), true
-            );
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            isJumping = true;
-            body.applyLinearImpulse(
-                new Vector2(0, -3f), body.getWorldCenter(), true
-            );
-        }
-
-        if (Gdx.input.isTouched()) {
-
-            isWalkingRight = false;
-            isWalkingLeft = false;
-
-            float valueTouchX = Gdx.input.getX();
-            float valueTouchY = Gdx.input.getY();
-            float screenWidth = Gdx.graphics.getWidth();
-            float screenHeight = Gdx.graphics.getHeight();
-
-            if (valueTouchX < screenWidth / 2) {
+        if (!isDying) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 isWalkingLeft = true;
                 body.applyLinearImpulse(
                     new Vector2(-3f, 0), body.getWorldCenter(), true
                 );
-            } else {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 isWalkingRight = true;
                 body.applyLinearImpulse(
                     new Vector2(+3f, 0), body.getWorldCenter(), true
                 );
-            }
-
-            if (valueTouchY > screenHeight / 2) {
-                isJumping = true;
-                body.applyLinearImpulse(
-                    new Vector2(0, -3f), body.getWorldCenter(), true
-                );
-            } else {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 isJumping = true;
                 body.applyLinearImpulse(
                     new Vector2(0, +3f), body.getWorldCenter(), true
                 );
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                isJumping = true;
+                body.applyLinearImpulse(
+                    new Vector2(0, -3f), body.getWorldCenter(), true
+                );
+            }
+
+            if (Gdx.input.isTouched()) {
+
+                isWalkingRight = false;
+                isWalkingLeft = false;
+
+                float valueTouchX = Gdx.input.getX();
+                float valueTouchY = Gdx.input.getY();
+                float screenWidth = Gdx.graphics.getWidth();
+                float screenHeight = Gdx.graphics.getHeight();
+
+                if (valueTouchX < screenWidth / 2) {
+                    isWalkingLeft = true;
+                    body.applyLinearImpulse(
+                        new Vector2(-3f, 0), body.getWorldCenter(), true
+                    );
+                } else {
+                    isWalkingRight = true;
+                    body.applyLinearImpulse(
+                        new Vector2(+3f, 0), body.getWorldCenter(), true
+                    );
+                }
+
+                if (valueTouchY > screenHeight / 2) {
+                    isJumping = true;
+                    body.applyLinearImpulse(
+                        new Vector2(0, -3f), body.getWorldCenter(), true
+                    );
+                } else {
+                    isJumping = true;
+                    body.applyLinearImpulse(
+                        new Vector2(0, +3f), body.getWorldCenter(), true
+                    );
+                }
             }
         }
     }
@@ -176,7 +189,16 @@ public class Player extends Sprite {
         }
 
         if (body.getLinearVelocity().y == 0) {
+            elapsedTime += dt;
             isJumping = false;
+        }
+
+        if (timer.getTotalTime() == 0) {
+            if (!isDying) {
+                isDying = true;
+                elapsedTime = 0;
+            }
+            elapsedTime += dt;
         }
     }
 
@@ -190,7 +212,8 @@ public class Player extends Sprite {
             currentTexture = walkingLeftAnimation.getKeyFrame(elapsedTime, true);
         } else if (isJumping) {
             currentTexture = jumpingAnimation.getKeyFrame(elapsedTime, true);
-
+        } else if (isDying) {
+            currentTexture = dyingAnimation.getKeyFrame(elapsedTime, false);
         } else {
             currentTexture = defaultTexture;
         }

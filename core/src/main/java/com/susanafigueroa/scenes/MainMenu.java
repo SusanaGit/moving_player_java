@@ -76,7 +76,7 @@ public class MainMenu implements Screen {
 
         timer = new Timer(new BitmapFont(),120f);
 
-        cuteGirl = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2);
+        cuteGirl = new Player(world, "player/player.png", (float) GameInfo.WIDTH/2 , (float) GameInfo.HEIGHT/2, timer);
 
         bodiesMap = new BodiesMap();
         bodiesMap.createStaticBodiesFromMap(tiledMap, world);

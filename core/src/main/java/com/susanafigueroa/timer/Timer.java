@@ -15,11 +15,19 @@ public class Timer {
         this.totalTime = totalTime;
     }
 
-    public void runTimer(SpriteBatch batch) {
-        totalTime -= Gdx.graphics.getDeltaTime();
+    public float getTotalTime() {
+        return this.totalTime;
+    }
 
-        int minutes = (int) totalTime/60;
-        int seconds = (int) totalTime%60;
+    public void runTimer(SpriteBatch batch) {
+        this.totalTime -= Gdx.graphics.getDeltaTime();
+
+        if (this.totalTime < 0) {
+            this.totalTime = 0;
+        }
+
+        int minutes = (int) this.totalTime/60;
+        int seconds = (int) this.totalTime%60;
 
         String showTimer = minutes + " : " + seconds;
         font.draw(batch, showTimer, GameInfo.WIDTH - (float) GameInfo.WIDTH/15, (float) GameInfo.WIDTH/20);
